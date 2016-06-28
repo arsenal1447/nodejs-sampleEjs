@@ -9,6 +9,9 @@ var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 var session = require('express-session');
+var reg = require('/routes/reg');
+var login = require('/routes/login');
+var logout = require('/routes/logout');
 
 var app = express();
 
@@ -29,6 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser('Zxx'));
 //就依靠这个中间件
 app.use(session({secret:'zxx'}))
+
+app.use('/reg',reg);
+app.use('/login',login);
+app.use('/logout',logout);
 
 
 app.use('/', routes);
