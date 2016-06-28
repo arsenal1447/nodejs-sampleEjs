@@ -9,9 +9,9 @@ var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 var session = require('express-session');
-var reg = require('/routes/reg');
-var login = require('/routes/login');
-var logout = require('/routes/logout');
+var reg = require('./routes/reg');
+var login = require('./routes/login');
+var logout = require('./routes/logout');
 
 var app = express();
 
