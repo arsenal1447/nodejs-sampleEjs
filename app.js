@@ -6,7 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+// var users = require('./routes/users');
+
+var session = require('express-session');
 
 var app = express();
 
@@ -22,8 +24,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//这里传入一个密钥加 session_id
+app.use(cookieParser('Zxx'));
+//就依靠这个中间件
+app.use(session({secret:'zxx'}))
+
+
 app.use('/', routes);
-app.use('/users', users);
+// app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,5 +65,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.listen(8000);
 
 module.exports = app;
