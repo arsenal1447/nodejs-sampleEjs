@@ -24,6 +24,10 @@ study url:[http://www.cnblogs.com/zhongweiv/p/nodejs_express_webapp.html](http:/
 
 
 ## 报错情况
+
+
+![](https://github.com/zxx1988328/nodejs-sampleEjs/blob/master/img/error.png)
+
 	E:\nodework\sampleEjs\node_modules\express\lib\router\index.js:458
 	      throw new TypeError('Router.use() requires middleware function but got a ' + gettype(fn));
 	      ^
@@ -47,3 +51,5 @@ study url:[http://www.cnblogs.com/zhongweiv/p/nodejs_express_webapp.html](http:/
 	var express = require('express'),
 	router = express.Router();
 	module.exports = router;
+
+
