@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-// var users = require('./routes/users');
 
 var session = require('express-session');
 var reg = require('./routes/reg');
@@ -33,13 +32,12 @@ app.use(cookieParser('Zxx'));
 //就依靠这个中间件
 app.use(session({secret:'zxx'}))
 
-app.use('/reg',reg);
-app.use('/login',login);
-app.use('/logout',logout);
 
 
 app.use('/', routes);
-// app.use('/users', users);
+app.use('/reg',reg);
+app.use('/login',login);
+app.use('/logout',logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

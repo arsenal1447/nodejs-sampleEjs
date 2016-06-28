@@ -1,94 +1,90 @@
-    var mysql = require('mysql');
-    var DB_NAME = 'nodesample';
+var mysql = require('mysql');
+var DB_NAME = 'nodesample';
 
+var pool  = mysql.createPool({
+    host     : '127.0.0.1',
+    user     : 'root',
+    password : '123456'
+});
 
-    var pool = mysql.createPool({
-        host        :'127.0.0.1',
-        user        :'root',
-        password    :'123456',
+pool.on('connection', function(connection) {  
+    connection.query('SET SESSION auto_increment_increment=1'); 
+});  
+
+function User(user){
+    this.username = user.username;
+    this.userpass = user.userpass;
+};
+
+module.exports = User;
+
+pool.getConnection(function(err, connection) {
+
+    var useDbSql = "USE " + DB_NAME;
+    connection.query(useDbSql, function (err) {
+         if (err) {
+            console.log("USE Error: " + err.message);
+            return;
+         }
+         console.log('USE succeed');
     });
 
+    //保存数据
+    User.prototype.save = function save(callback) {
+        var user = {
+            username: this.username,
+            userpass: this.userpass
+        };
 
-    pool.on('connection',function(connection){
-        connection.query('SET SESSION auto_increment_increment=1');
-    });
+        var insertUser_Sql = "INSERT INTO userinfo(id,username,userpass) VALUES(0,?,?)";
 
-
-    function User(user){
-        this.username = user.username;
-        this.userpass = user.userpass;
-    };
-
-    module.express = User;
-
-    pool.getConnection(function(err,connection){
-
-        var useDbSql = "USE" + DB_NAME;
-        connection.query(useDbSql,function(err){
-            if(err){
-                console.log("USE Error:"+err.message);
+        connection.query(insertUser_Sql, [user.username, user.userpass], function (err,result) {
+            if (err) {
+                console.log("insertUser_Sql Error: " + err.message);
                 return;
             }
-            console.log('USE succeed!');
-        });
 
-        //save data
-        User.prototype.save = function save(callback){
-            var user = {
-                username:this.username,                userpass:this.userpass
-            };
+            connection.release();
 
-            var insertUser_Sql = "INSERT INTO userinfo(id,username,userpass) VALUES (0,?,?)";
+            console.log("invoked[save]");
+            callback(err,result);                     
+        });       
+    };
 
-            connection.query(insertUser_Sql, [user.username, user.userpass], function(err,result){
-                if(err){
-                    console.log("inserUser_Sql Error:"+err.message);
-                    return;
-                }
+    //根据用户名得到用户数量
+    User.getUserNumByName = function getUserNumByName(username, callback) {
 
-                connection.release();
+        var getUserNumByName_Sql = "SELECT COUNT(1) AS num FROM userinfo WHERE username = ?";
 
-                console.log("invoked[save]");
-                callback(err,result);
-            });
-        };
+        connection.query(getUserNumByName_Sql, [username], function (err, result) {
+            if (err) {
+                console.log("getUserNumByName Error: " + err.message);
+                return;
+            }
 
+            connection.release();
 
-        //根据用户名得到用户数量
-        User.getUserNumByName = function getUserNumByName(username, calllback) {
-            
-            var getUserNumByName_Sql = "SELECT COUNT(1) AS num FROM userinfo WHERE username = ?";
+            console.log("invoked[getUserNumByName]");
+            callback(err,result);                     
+        });        
+    };
 
-            connection.query(getUserNumByName_Sql, [username], function(err,result){
-                if(err){
-                    console.log("getUserNumByName Error:"+err.message);
-                    return;
-                }
+    //根据用户名得到用户信息
+    User.getUserByUserName = function getUserNumByName(username, callback) {
 
-                connection.release();
+        var getUserByUserName_Sql = "SELECT * FROM userinfo WHERE username = ?";
 
-                console.log("invoked[getUserNumByName]");
-                callback(err,result);
-            });
-        };
+        connection.query(getUserByUserName_Sql, [username], function (err, result) {
+            if (err) {
+                console.log("getUserByUserName Error: " + err.message);
+                return;
+            }
 
+            connection.release();
 
-        //根据用户名得到用户信息
-        User.getUserByZUserName = function getUserByZUserName(username, calllback) {
-            
-            var getUserByZUserName_Sql = "SELECT * FROM userinfo WHERE username = ?";
-
-            connection.query(getUserByZUserName_Sql, [username], function(err,result){
-                if(err){
-                    console.log("getUserByZUserName Error:"+err.message);
-                    return;
-                }
-
-                connection.release();
-
-                console.log("invoked[getUserByZUserName]");
-                callback(err,result);
-            });
-        };
-
-    });
+            console.log("invoked[getUserByUserName]");
+            callback(err,result);                     
+        });        
+    };
+ 
+});
