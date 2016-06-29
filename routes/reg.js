@@ -40,7 +40,7 @@ router.post('/', function(req, res) {
               res.render('reg', { title: TITLE_REG }); 
               return;            
           }        
-
+          console.log("insertId==="+result.insertId);
           if(result.insertId > 0){
               res.locals.success = '注册成功,请点击   <a class="btn btn-link" href="/login" role="button"> 登录 </a>' ;
           }else{
