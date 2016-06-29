@@ -1,24 +1,21 @@
-var express = require('express');
+var express = require('express'),
     router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  
-    if(req.cookies.islogin){
-        console.log('cookie:' + req.cookies.islogin);
-        req.locals.username = req.cookie.islogin;
-    }
-    res.render('index', { title: 'Express' });
+router.get('/', function(req, res) {
+    if(req.cookies.islogin){ 
+        console.log('cookies:' + req.cookies.islogin);
+        req.session.username = req.cookies.islogin;
+    }  
 
-    if(req.session.username){
+    if(req.session.username){    
         console.log('session:' + req.session.username);
-        res.locals.username = req.session.username;
+        res.locals.username = req.session.username;      
     }else{
         res.redirect('/login');
-        return;
+        return;    
     }
 
-    res.render('index',{title:'首页'});
+    res.render('index',{title:'主页'});
 });
 
 module.exports = router;
