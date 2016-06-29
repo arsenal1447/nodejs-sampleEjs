@@ -1,6 +1,16 @@
 var mysql = require('mysql');
 var DB_NAME = 'nodesample';
 
+// var pool = null;
+
+// if(pool==null){
+//      pool  = mysql.createPool({
+//         host     : '127.0.0.1',
+//         user     : 'root',
+//         password : '123456'
+//     });    
+// }
+
 var pool  = mysql.createPool({
     host     : '127.0.0.1',
     user     : 'root',
@@ -44,7 +54,7 @@ pool.getConnection(function(err, connection) {
                 return;
             }
 
-            connection.release();
+            // connection.release();//注释此处注册后可以正确跳转，不注释，不可以跳转
 
             console.log("invoked[save]");
             callback(err,result);                     
